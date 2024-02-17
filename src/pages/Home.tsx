@@ -15,7 +15,7 @@ export default function Home() {
           display: "grid",
           gridTemplateColumns: "2fr 3fr",
           gap: "50px",
-          height: "calc(100% - 200px)",
+          height: "calc(100vh - 200px)",
         }}
       >
         <LeftPanel />

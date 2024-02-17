@@ -23,7 +23,6 @@ function App() {
         style={{
           margin: 0,
           padding: 0,
-          overflow: "hidden",
           backgroundImage: `url(${GreenBackground}), url(${PurpleBackground})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
