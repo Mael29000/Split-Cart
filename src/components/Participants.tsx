@@ -1,6 +1,17 @@
+import { get } from "http";
 import React from "react";
+import { getUsers } from "./mocks";
+import { User } from "./types";
 
 export default function Participants() {
+  const [participants, setParticipants] = React.useState<User[]>([]);
+
+  React.useEffect(() => {
+    getUsers().then((users) => {
+      setParticipants(users);
+    });
+  }, []);
+
   return (
     <div>
       <h2 style={{ fontSize: "20px", textAlign: "center" }}>Participants</h2>
@@ -30,5 +41,3 @@ const ParticipantItem = (props: ParticipantItemProps) => {
     </p>
   );
 };
-
-const participants = ["Mael", "Ting", "Jayce", "Antonin"];

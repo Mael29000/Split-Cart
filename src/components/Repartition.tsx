@@ -1,15 +1,25 @@
 import React from "react";
+import { Part } from "./types";
+import { getRepartition } from "./mocks";
 
 export default function Repartition() {
+  const [repartition, setRepartition] = React.useState<Part[]>([]);
+
+  React.useEffect(() => {
+    getRepartition().then((repartition) => {
+      setRepartition(repartition);
+    });
+  }, []);
+
   return (
     <div>
       <h2 style={{ fontSize: "20px", textAlign: "center" }}>Répartition</h2>
       <div style={{ padding: "20px 50px" }}>
         {repartition.map((item) => (
           <RepartitionItem
-            key={item.name}
-            name={item.name}
-            value={item.value}
+            key={item.user}
+            name={item.user}
+            value={item.total}
           />
         ))}
       </div>
@@ -31,6 +41,7 @@ const RepartitionItem = (props: RepartitionItemProps) => {
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         marginBottom: "20px",
+        alignItems: "center",
       }}
     >
       <p>{name}</p>
@@ -47,10 +58,3 @@ const RepartitionItem = (props: RepartitionItemProps) => {
     </div>
   );
 };
-
-const repartition = [
-  { name: "Mael", value: -10 },
-  { name: "Ting", value: 20 },
-  { name: "Jayce", value: 30 },
-  { name: "Antonin", value: -40 },
-];
