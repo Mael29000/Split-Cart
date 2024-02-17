@@ -69,7 +69,9 @@ export default function ItemList(props: ItemListProps) {
 
   return (
     <div>
-      <h2 style={{ fontSize: "20px", textAlign: "center" }}>Besoin</h2>
+      <h2 style={{ fontSize: "20px", textAlign: "center" }}>
+        {type === "besoin" ? "Besoin" : "Restants"}
+      </h2>
       <div style={{ padding: "25px" }}>
         {items.map((item, index) => (
           <ItemRow
@@ -174,7 +176,7 @@ export default function ItemList(props: ItemListProps) {
         }}
         onClick={addATempItem}
       >
-        + Ajouter un besoin
+        {`+ Ajouter un ${type === "besoin" ? "besoin" : "article restant"}`}
       </button>
     </div>
   );
