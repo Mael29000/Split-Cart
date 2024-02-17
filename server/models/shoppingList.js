@@ -20,7 +20,17 @@ const shoppingListSchema = mongoose.model(
         type: [],
         required: true,
         default: []
-      }
+      },
+      boughtBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+      },
+      sharedWith: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+      }]
     }
   )
 );
@@ -29,7 +39,9 @@ function validateShoppingList(shoppingList) {
   const schema = {
     title: Joi.string().min(1).max(50).required(),
     price: Joi.number().min(0).required(),
-    units: Joi.array().items(Joi.string()).required()
+    units: Joi.array().items(Joi.string()).required(),
+    boughtBy: Joi.string().required(),
+    sharedWith: Joi.array().items(Joi.string()).required()
   };
 
   return Joi.validate(shoppingList, schema);
