@@ -29,6 +29,7 @@ function validateShoppingList(shoppingList) {
   const schema = {
     title: Joi.string().min(1).max(50).required(),
     price: Joi.number().min(0).required(),
+    units: Joi.array().items(Joi.string()).required()
   };
 
   return Joi.validate(shoppingList, schema);
