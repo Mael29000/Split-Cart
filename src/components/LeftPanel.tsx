@@ -8,7 +8,7 @@ export default function LeftPanel() {
     <div
       style={{
         display: "grid",
-        gridTemplateRows: "1fr 1fr",
+        gridTemplateRows: "3fr 4fr",
         gap: "50px",
       }}
     >

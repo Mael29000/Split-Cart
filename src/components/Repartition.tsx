@@ -14,7 +14,7 @@ export default function Repartition() {
   return (
     <div>
       <h2 style={{ fontSize: "20px", textAlign: "center" }}>Répartition</h2>
-      <div style={{ padding: "20px 50px" }}>
+      <div style={{ padding: "10px 50px" }}>
         {repartition.map((item) => (
           <RepartitionItem
             key={item.user}
@@ -40,7 +40,6 @@ const RepartitionItem = (props: RepartitionItemProps) => {
       style={{
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        marginBottom: "20px",
         alignItems: "center",
       }}
     >

@@ -12,7 +12,7 @@ export default function Panel(props: PanelProps) {
     <div
       style={{
         background: "#fff",
-        padding: !disablePadding ? "25px" : 0,
+        padding: !disablePadding ? "25px 25px 0px 25px" : 0,
         boxShadow: "0px 0px 6px 0px rgba(0,0,0,0.25)",
         borderRadius: "25px",
         position: "relative",
