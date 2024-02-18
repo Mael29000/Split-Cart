@@ -1,19 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
-const socketIo = require("socket.io");
 const cors = require("cors");
 const winston = require("winston");
+const setupWebSocketServer = require("./routes/websocket");
 
 const app = express();
 const port = process.env.SERVER_PORT || 3001;
 const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
+
+setupWebSocketServer(server);
 
 app.use(cors()); // Apply CORS middleware here
 app.use(express.json());
@@ -31,15 +27,6 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something failed.");
 });
 
-io.on("connection", (socket) => {
-  winston.info("a user connected");
-  socket.on("disconnect", () => {
-    winston.info("user disconnected");
-  });
-});
-
 server.listen(port, () => {
   winston.info(`Server is running at http://localhost:${port}`);
 });
-
-module.exports = io;

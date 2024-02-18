@@ -1,13 +1,14 @@
 const { ShoppingList, validate } = require("../models/shoppingList");
 const express = require("express");
 const router = express.Router();
-const io = require("../index");
+const { wss } = require("../index");
 
 router.get("/", async (req, res) => {
   const shoppingLists = await ShoppingList.find();
   res.send(shoppingLists);
 });
 
+/*
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -15,14 +16,13 @@ router.post("/", async (req, res) => {
   const newShoppingList = new ShoppingList({
     name: req.body.name,
     price: req.body.price,
-    boughtBy: req.body.boughtBy,
-    sharedWith: req.body.sharedWith
+    units: req.body.units,
   });
   await newShoppingList.save();
 
-  io.emit("shoppingListUpdated", newShoppingList);
+  wss.broadcast({ type: "shoppingListAdded", data: newShoppingList });
   res.send(newShoppingList);
-});
+});*/
 
 router.put("/:id", async (req, res) => {
   const { error } = validate(req.body);
@@ -33,8 +33,7 @@ router.put("/:id", async (req, res) => {
     {
       name: req.body.name,
       price: req.body.price,
-      boughtBy: req.body.boughtBy,
-      sharedWith: req.body.sharedWith
+      units: req.body.units,
     },
     { new: true }
   );

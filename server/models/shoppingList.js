@@ -1,47 +1,42 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
+const StatusEnum = ["taken", "missing", "lock", "remaining"];
+
 const shoppingListSchema = mongoose.model(
   "ShoppingList",
-  new mongoose.Schema(
-    {
-      name: {
-        type: String,
-        required: true,
-        minlength: 1,
-        maxlength: 50,
+  new mongoose.Schema({
+    name: {
+      type: String,
+      required: true,
+      minlength: 1,
+      maxlength: 50,
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    units: [
+      {
+        status: StatusEnum,
+        user: String,
       },
-      price: {
-        type: Number,
-        required: false,
-        min: 0,
-      },
-      units:{
-        type: [],
-        required: true,
-        default: []
-      },
-      boughtBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
-      },
-      sharedWith: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
-      }]
-    }
-  )
+      { _id: false }
+    ],
+  })
 );
 
 function validateShoppingList(shoppingList) {
-  const schema =  Joi.object({
+  const schema = Joi.object({
     name: Joi.string().min(1).max(50).required(),
     price: Joi.number().min(0).required(),
-    units: Joi.array().items(Joi.string()).required(),
-    boughtBy: Joi.string().required(),
-    sharedWith: Joi.array().items(Joi.string()).required()
+    units: Joi.array().items(
+      Joi.object({
+        status: Joi.string().valid(...StatusEnum).required(),
+        user: Joi.string().required(),
+      })
+    ),
   });
 
   return schema.validate(shoppingList);
