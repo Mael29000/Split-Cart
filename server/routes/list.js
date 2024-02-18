@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
   res.send(shoppingLists);
 });
 
-/*
+
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -72,4 +72,4 @@ router.get("/:id", async (req, res) => {
   res.send(shoppingList);
 });
 
-module.exports = router;*/
+module.exports = router;

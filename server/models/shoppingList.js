@@ -19,7 +19,7 @@ const shoppingListSchema = mongoose.model(
     },
     units: [
       {
-        status: StatusEnum,
+        status: String,
         user: String,
       },
       { _id: false }
