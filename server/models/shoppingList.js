@@ -22,6 +22,7 @@ const shoppingListSchema = mongoose.model(
         status: StatusEnum,
         user: String,
       },
+      { _id: false }
     ],
   })
 );

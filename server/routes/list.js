@@ -1,7 +1,7 @@
 const { ShoppingList, validate } = require("../models/shoppingList");
 const express = require("express");
 const router = express.Router();
-const io = require("../index");
+const { wss } = require("../index");
 
 router.get("/", async (req, res) => {
   const shoppingLists = await ShoppingList.find();
@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
   });
   await newShoppingList.save();
 
-  io.emit("shoppingListUpdated", newShoppingList);
+  wss.broadcast({ type: "shoppingListAdded", data: newShoppingList });
   res.send(newShoppingList);
 });
 
