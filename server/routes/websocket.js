@@ -53,6 +53,7 @@ function setupWebSocketServer(server) {
       price: payload.price,
       units: payload.units,
     });
+    console.log(shoppingList.units.status);
     await shoppingList.save();
     broadcast(wss, { type: "shoppingListAdded", data: shoppingList });
   }

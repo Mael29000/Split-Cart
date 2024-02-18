@@ -1,31 +1,30 @@
 async function calculateCosts(shoppingLists) {
   let totalCost = 0;
   let contributions = {};
-  let participantCount = 0;
 
-  shoppingLists.forEach((list) => {
-    totalCost += list.price;
+  const filteredShoppingLists = shoppingLists.filter(list => 
+      list.units.every(unit => unit.status !== "remaining")
+  );
 
-    list.units.forEach((unit) => {
-      contributions[unit.user] = contributions[unit.user] || 0;
-      contributions[unit.user] += list.price / list.units.length;
-      participantCount = Math.max(participantCount, list.units.length);
-    });
+  filteredShoppingLists.forEach((list) => {
+      totalCost += list.price;
+      list.units.forEach((unit) => {
+          contributions[unit.user] = contributions[unit.user] || 0;
+          contributions[unit.user] += list.price / list.units.length;
+      });
   });
 
+  const participantCount = Object.keys(contributions).length;
   const averageContribution = totalCost / participantCount;
 
-  let balances = {};
-  for (const user in contributions) {
-    balances[user] = contributions[user] - averageContribution;
-  }
+  let balances = Object.entries(contributions).map(([user, contribution]) => {
+      return {
+          user: user,
+          total: contribution - averageContribution
+      };
+  });
 
-  return {
-    totalCost,
-    individualContributions: contributions,
-    averageContribution,
-    balances,
-  };
+  return { balances };
 }
 
 module.exports = calculateCosts;
