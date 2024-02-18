@@ -1,14 +1,25 @@
 import React from "react";
 import Panel from "../components/Panel";
+import { addUser } from "../services";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   // save the user to local storage on save
   // redirect to home page
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const username = e.currentTarget.username.value;
-    localStorage.setItem("user", username);
-    window.location.href = "/";
+    addUser(username)
+      .then((res) => {
+        localStorage.setItem("user", username);
+        navigate("/");
+        console.log(res);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (

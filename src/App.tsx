@@ -10,6 +10,8 @@ function App() {
   // check if a user is stored in local storage
   // if not, redirect to login page
 
+  const [hello, setHello] = React.useState("test");
+
   React.useEffect(() => {
     const user = localStorage.getItem("user");
     if (!user && window.location.pathname !== "/login") {
@@ -17,8 +19,17 @@ function App() {
     }
   }, []);
 
+  React.useEffect(() => {
+    fetch("http://localhost:3001").then((res) =>
+      res.text().then((text) => {
+        setHello(text);
+      })
+    );
+  });
+
   return (
     <BrowserRouter>
+      <h1>{hello}</h1>
       <div
         style={{
           margin: 0,
