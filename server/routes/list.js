@@ -15,8 +15,7 @@ router.post("/", async (req, res) => {
   const newShoppingList = new ShoppingList({
     name: req.body.name,
     price: req.body.price,
-    boughtBy: req.body.boughtBy,
-    sharedWith: req.body.sharedWith
+    units: req.body.units,
   });
   await newShoppingList.save();
 
@@ -33,8 +32,7 @@ router.put("/:id", async (req, res) => {
     {
       name: req.body.name,
       price: req.body.price,
-      boughtBy: req.body.boughtBy,
-      sharedWith: req.body.sharedWith
+      units: req.body.units,
     },
     { new: true }
   );
