@@ -1,15 +1,17 @@
 import React from "react";
 import { Part } from "./types";
 import { getRepartition } from "./mocks";
+import { useRepartition } from "../contexts/RepartitionContext";
 
 export default function Repartition() {
-  const [repartition, setRepartition] = React.useState<Part[]>([]);
+  const { repartition: repartitionContext } = useRepartition();
+
+  const [repartition, setRepartition] =
+    React.useState<Part[]>(repartitionContext);
 
   React.useEffect(() => {
-    getRepartition().then((repartition) => {
-      setRepartition(repartition);
-    });
-  }, []);
+    setRepartition(repartitionContext);
+  }, [repartitionContext]);
 
   return (
     <div>

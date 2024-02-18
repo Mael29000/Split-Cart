@@ -19,6 +19,7 @@ export default function Home() {
   React.useEffect(() => {
     if (readyState === ReadyState.OPEN) {
       sendMessage(JSON.stringify({ action: "get" }));
+      sendMessage(JSON.stringify({ action: "calculateBalances" }));
     }
   }, [readyState, sendMessage]);
 
@@ -90,9 +91,11 @@ export default function Home() {
         );
       }
 
-      if (data.type === "calculateBalances") {
+      if (data.type === "balances") {
+        console.log("data.data.balances", data.data.balances);
+
         setRepartition(
-          data.data.map((part: any) => ({
+          data.data.balances.map((part: any) => ({
             user: part.user,
             total: part.total,
           }))

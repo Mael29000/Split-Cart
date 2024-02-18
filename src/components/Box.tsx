@@ -74,7 +74,6 @@ export default function Box(props: BoxProps) {
         onClick={onClick}
         onMouseEnter={() => {
           setOver(true);
-          console.log(unit.status);
         }}
         onMouseLeave={() => setOver(false)}
       >
