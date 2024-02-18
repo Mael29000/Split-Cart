@@ -1,18 +1,21 @@
 import React from "react";
 import { Item, ItemType, Unit } from "./types";
-import { addItems, getAllItems, removeItem, updateItem } from "./mocks";
 import ItemRow from "./ItemRow";
+import { useShoppingList } from "../contexts/ShoppingList";
+import useWebSocket from "react-use-websocket";
 
 interface ItemListProps {
   type: ItemType;
 }
 
 export default function ItemList(props: ItemListProps) {
+  const { shoppingList } = useShoppingList();
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
+    "ws://localhost:3001"
+  ); // Replace with your server URL
+
   const { type } = props;
-
-  const [items, setItems] = React.useState<Item[]>([]);
-  const [tempItems, setTempItems] = React.useState<Item>();
-
   const filterItems = (items: Item[]) => {
     if (type === "restant") {
       return items.filter((item) => {
@@ -28,11 +31,30 @@ export default function ItemList(props: ItemListProps) {
       });
     }
   };
+  const [items, setItems] = React.useState<Item[]>(filterItems(shoppingList));
+
+  React.useEffect(() => {
+    setItems(filterItems(shoppingList));
+  }, [shoppingList]);
+
+  const [tempItems, setTempItems] = React.useState<Item>();
 
   const updateOneItem = (item: Item) => {
-    updateItem(item).then((items) => {
-      setItems(filterItems(items));
-    });
+    // use the websocket to send the updated item to the server
+    sendMessage(
+      JSON.stringify({
+        action: "update",
+        payload: {
+          _id: item.id,
+          name: item.name,
+          price: item.price,
+          units: item.units.map((unit) => ({
+            user: unit.user,
+            status: unit.status,
+          })),
+        },
+      })
+    );
   };
 
   const addATempItem = () => {
@@ -41,31 +63,47 @@ export default function ItemList(props: ItemListProps) {
         id: "-1",
         name: "Nouveau besoin",
         price: 0,
-        units: [{ status: "missing", user: "" }],
+        units: [
+          { status: type === "besoin" ? "missing" : "remaining", user: "" },
+        ],
       });
     }
   };
 
   const addOneItem = (item: Item) => {
-    addItems(item).then((items) => {
-      setItems(filterItems(items));
-    });
+    // use the websocket to send the new item to the server
+    sendMessage(
+      JSON.stringify({
+        action: "create",
+        payload: {
+          _id: item.id,
+          name: item.name,
+          price: item.price,
+          units: item.units.map((unit) => ({
+            user: unit.user,
+            status: unit.status,
+          })),
+        },
+      })
+    );
   };
 
   const removeOneItem = (item: Item) => {
-    removeItem(item).then((items) => {
-      setItems(filterItems(items));
-    });
-  };
-
-  React.useEffect(() => {
-    // get all the items from the server
-    getAllItems().then((items: Item[]) =>
-      // remove all the remaining items
-
-      setItems(filterItems(items))
+    sendMessage(
+      JSON.stringify({
+        action: "delete",
+        payload: {
+          _id: item.id,
+          name: item.name,
+          price: item.price,
+          units: item.units.map((unit) => ({
+            user: unit.user,
+            status: unit.status,
+          })),
+        },
+      })
     );
-  }, []);
+  };
 
   return (
     <div>

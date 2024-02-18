@@ -1,6 +1,6 @@
 import { get } from "http";
 import React from "react";
-import { getUsers } from "./mocks";
+import { getUsers } from "../services";
 import { User } from "./types";
 
 export default function Participants() {
@@ -8,7 +8,7 @@ export default function Participants() {
 
   React.useEffect(() => {
     getUsers().then((users) => {
-      setParticipants(users);
+      setParticipants(users.map((user: any) => user.username));
     });
   }, []);
 

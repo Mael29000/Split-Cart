@@ -33,33 +33,35 @@ export default function Login() {
       }}
     >
       <Panel>
-        <h2>Login</h2>
-        <form onSubmit={onSubmit}>
-          <input
-            name="username"
-            type="text"
-            placeholder="Username"
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #ccc",
-            }}
-          />
-          <button
-            type="submit"
-            style={{
-              padding: "10px",
-              borderRadius: "5px",
-              border: "none",
-              backgroundColor: "black",
-              color: "white",
-              cursor: "pointer",
-              marginLeft: "10px",
-            }}
-          >
-            Login
-          </button>
-        </form>
+        <div style={{ paddingBottom: "25px" }}>
+          <h2>Login</h2>
+          <form onSubmit={onSubmit}>
+            <input
+              name="username"
+              type="text"
+              placeholder="Username"
+              style={{
+                padding: "10px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                padding: "10px",
+                borderRadius: "5px",
+                border: "none",
+                backgroundColor: "black",
+                color: "white",
+                cursor: "pointer",
+                marginLeft: "10px",
+              }}
+            >
+              Login
+            </button>
+          </form>
+        </div>
       </Panel>
     </div>
   );
