@@ -40,6 +40,8 @@ export default function ItemList(props: ItemListProps) {
   const [tempItems, setTempItems] = React.useState<Item>();
 
   const updateOneItem = (item: Item) => {
+    console.log("updateOneItem", item);
+
     // use the websocket to send the updated item to the server
     sendMessage(
       JSON.stringify({
@@ -71,6 +73,8 @@ export default function ItemList(props: ItemListProps) {
   };
 
   const addOneItem = (item: Item) => {
+    console.log("addOneItem", item);
+
     // use the websocket to send the new item to the server
     sendMessage(
       JSON.stringify({

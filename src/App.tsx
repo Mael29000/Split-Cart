@@ -6,6 +6,7 @@ import PurpleBackground from "./assets/PurpleBackground.svg";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ShoppingListProvider } from "./contexts/ShoppingList";
+import { RepartitionProvider } from "./contexts/RepartitionContext";
 
 function App() {
   // check if a user is stored in local storage
@@ -22,25 +23,27 @@ function App() {
 
   return (
     <ShoppingListProvider>
-      <BrowserRouter>
-        <div
-          style={{
-            margin: 0,
-            padding: 0,
-            backgroundImage: `url(${GreenBackground}), url(${PurpleBackground})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            width: "100vw",
-            height: "100vh",
-          }}
-        >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
+      <RepartitionProvider>
+        <BrowserRouter>
+          <div
+            style={{
+              margin: 0,
+              padding: 0,
+              backgroundImage: `url(${GreenBackground}), url(${PurpleBackground})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              width: "100vw",
+              height: "100vh",
+            }}
+          >
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </RepartitionProvider>
     </ShoppingListProvider>
   );
 }

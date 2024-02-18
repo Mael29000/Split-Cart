@@ -6,6 +6,7 @@ import MidPannel from "../components/MidPanel";
 import { Item } from "../components/types";
 import { useShoppingList } from "../contexts/ShoppingList";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+import { useRepartition } from "../contexts/RepartitionContext";
 
 export default function Home() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(
@@ -13,6 +14,7 @@ export default function Home() {
   ); // Replace with your server URL
 
   const { shoppingList, setShoppingList } = useShoppingList();
+  const { repartition, setRepartition } = useRepartition();
 
   React.useEffect(() => {
     if (readyState === ReadyState.OPEN) {
@@ -38,7 +40,7 @@ export default function Home() {
             name: item.name,
             price: item.price,
             units: item.units.map((unit: any) => ({
-              status: "taken",
+              status: unit.status,
               user: unit.user,
             })),
           });
@@ -55,7 +57,7 @@ export default function Home() {
             name: data.data.name,
             price: data.data.price,
             units: data.data.units.map((unit: any) => ({
-              status: "taken",
+              status: unit.status,
               user: unit.user,
             })),
           },
@@ -77,7 +79,7 @@ export default function Home() {
                 name: data.data.name,
                 price: data.data.price,
                 units: data.data.units.map((unit: any) => ({
-                  status: "taken",
+                  status: unit.status,
                   user: unit.user,
                 })),
               };
@@ -85,6 +87,15 @@ export default function Home() {
 
             return item;
           })
+        );
+      }
+
+      if (data.type === "calculateBalances") {
+        setRepartition(
+          data.data.map((part: any) => ({
+            user: part.user,
+            total: part.total,
+          }))
         );
       }
     }

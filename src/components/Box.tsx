@@ -72,7 +72,10 @@ export default function Box(props: BoxProps) {
           userSelect: "none",
         }}
         onClick={onClick}
-        onMouseEnter={() => setOver(true)}
+        onMouseEnter={() => {
+          setOver(true);
+          console.log(unit.status);
+        }}
         onMouseLeave={() => setOver(false)}
       >
         {iconMap[unit.status]}
