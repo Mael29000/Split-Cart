@@ -14,10 +14,10 @@ function setupWebSocketServer(server) {
       const messageString = message.toString();
       console.log("Received:", messageString);
       //const messageObject = JSON.parse(messageString);
-      console.log("Received:", messageString);
+      //console.log("Received:", messageString);
       const { action, payload } = JSON.parse(messageString);
       console.log("Received:", action);
-      console.log("Received:", payload);
+      //console.log("Received:", payload);
 
       //console.log('Received:', messageObject.name);
       try {
@@ -56,6 +56,10 @@ function setupWebSocketServer(server) {
     console.log(shoppingList.units.status);
     await shoppingList.save();
     broadcast(wss, { type: "shoppingListAdded", data: shoppingList });
+
+    const allShoppingLists = await ShoppingList.find();
+    const balances = await calculateCosts(allShoppingLists);
+    broadcast(wss, { type: "balances", data: balances });
   }
 
   async function handleUpdateAction(payload, wss) {
@@ -73,6 +77,10 @@ function setupWebSocketServer(server) {
         type: "shoppingListUpdated",
         data: updatedShoppingList,
       });
+
+      const allShoppingLists = await ShoppingList.find();
+      const balances = await calculateCosts(allShoppingLists);
+      broadcast(wss, { type: "balances", data: balances });
     } else {
       wss.send(JSON.stringify({ error: "Shopping list not found" }));
     }
@@ -87,6 +95,10 @@ function setupWebSocketServer(server) {
         type: "shoppingListDeleted",
         data: shoppingListToDelete,
       });
+
+      const allShoppingLists = await ShoppingList.find();
+      const balances = await calculateCosts(allShoppingLists);
+      broadcast(wss, { type: "balances", data: balances });
     } else {
       wss.send(JSON.stringify({ error: "Shopping list not found" }));
     }
@@ -106,6 +118,7 @@ function setupWebSocketServer(server) {
     try {
       const shoppingList = await ShoppingList.find();
       const balances = await calculateCosts(shoppingList);
+      console.log(balances);
       ws.send(JSON.stringify({ type: "balances", data: balances }));
     } catch (error) {
       ws.send(

@@ -1,30 +1,43 @@
 async function calculateCosts(shoppingLists) {
-  let totalCost = 0;
-  let contributions = {};
+    let totalCost = 0;
+    let contributions = new Map();
 
-  const filteredShoppingLists = shoppingLists.filter(list => 
-      list.units.every(unit => unit.status !== "remaining")
-  );
+    
+    shoppingLists.forEach((list) => {
+        if (list.units.some(unit => unit.status === "remaining")) {
+            return; 
+        }
+        //console.log(list.price)
+        totalCost += list.price;
+        const unitCount = list.units.length;
 
-  filteredShoppingLists.forEach((list) => {
-      totalCost += list.price;
-      list.units.forEach((unit) => {
-          contributions[unit.user] = contributions[unit.user] || 0;
-          contributions[unit.user] += list.price / list.units.length;
-      });
-  });
+        list.units.forEach((unit) => {
+            if (!unit.user) return; 
 
-  const participantCount = Object.keys(contributions).length;
-  const averageContribution = totalCost / participantCount;
+            contributions.set(
+                unit.user, 
+                (contributions.get(unit.user) || 0) + list.price / unitCount
+            );
+        });
+    });
 
-  let balances = Object.entries(contributions).map(([user, contribution]) => {
-      return {
-          user: user,
-          total: contribution - averageContribution
-      };
-  });
+    //console.log(contributions);
+    //console.log(totalCost);
 
-  return { balances };
+    if (contributions.size === 0) {
+        return { balances: [] }; 
+    }
+
+    const averageContribution = totalCost / contributions.size;
+    //console.log(averageContribution);
+
+    
+    let balances = Array.from(contributions, ([user, userContribution]) => ({
+        user,
+        total: userContribution - averageContribution
+    }));
+    //console.log(balances)
+    return { balances };
 }
 
 module.exports = calculateCosts;
